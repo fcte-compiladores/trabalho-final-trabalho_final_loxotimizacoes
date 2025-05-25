@@ -4,17 +4,29 @@ program    : stmt*
 
 ?stmt      : expr ";"
            | print_cmd
+           | decl ";"
            // | if_cmd
            // | for_cmd
            // | ...
 
 print_cmd  : "print" expr ";"
+decl   : "var" VAR ("=" expr)?
 
 // EXPRESSÕES
-?expr      : test
+?expr      : assign
 
-?test      : test "==" cmp  -> eq
-           | test "!=" cmp  -> ne
+?assign    : VAR "=" expr
+            | call "." VAR "=" expr -> setattr_
+            | logic_or
+
+?logic_or   : logic_and "or" logic_or
+            | logic_and
+
+?logic_and  : equality "and" logic_and
+            | equality
+
+?equality  : equality "==" cmp  -> eq
+           | equality "!=" cmp  -> ne
            | cmp
 
 ?cmp       : cmp ">" factor   -> gt
@@ -27,8 +39,16 @@ print_cmd  : "print" expr ";"
            | factor "-" term  -> sub
            | term
 
-?term      : term "*" atom   -> mul
-           | term "/" atom   -> div 
+?term      : term "*" unary   -> mul
+           | term "/" unary   -> div 
+           | unary
+
+?unary     : "-" unary -> neg
+           | "!" unary -> not_
+           | call
+
+?call      : call "(" args? ")" -> call
+           | call "." VAR -> getattr_
            | atom
 
 ?atom      : NUMBER 
@@ -36,11 +56,9 @@ print_cmd  : "print" expr ";"
            | VAR
            | STRING
            | NIL
-           | "(" cmp ")"
-           | call
+           | "(" expr ")"
 
-call       : VAR "(" params ")"
-params     : [ expr ("," expr )* ]
+args     : [ expr ("," expr )* ]         
 
 BOOL.2     : "true" | "false"
 VAR.1      : /[a-z_]\w*/

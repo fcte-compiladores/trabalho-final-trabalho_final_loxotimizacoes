@@ -12,6 +12,7 @@ from lark import Transformer, v_args
 
 from . import runtime as op
 from .ast import *
+from pprint import pprint
 
 
 def op_handler(op: Callable):
@@ -48,12 +49,47 @@ class LoxTransformer(Transformer):
     ne = op_handler(op.ne)
 
     # Outras expressões
-    def call(self, name: Var, params: list):
-        return Call(name.name, params)
+    def call(self, node: Var | Getattr, args: list=[]):
+        return Call(node, args)
         
-    def params(self, *args):
+    def args(self, *args):
         params = list(args)
         return params
+    
+    def getattr_(self, obj: Call, name: Var):
+        if isinstance(name, Var):
+            name = name.name
+        elif hasattr(name, "value"):
+            name = name.value
+        
+        return Getattr(obj, name)
+
+    def setattr_(self, obj: Call, name: Var, value: Expr):
+        if isinstance(name, Var):
+            name = name.name
+        elif hasattr(name, "value"):
+            name = name.value
+
+        return Setattr(obj, name, value)
+
+    def not_(self, expr: Expr):
+        return UnaryOp(op.not_, expr)
+    
+    def neg(self, expr: Expr):
+        return UnaryOp(op.neg, expr)
+    
+    def logic_or(self, *args: list[Expr]):
+        return Or(args)
+    
+    def logic_and(self, *args: list[Expr]):
+        return And(args)
+    
+    def decl(self, name: Var, expr: Expr):
+        return VarDef(name, expr)
+    
+    def assign(self, name: Var, expr: Expr):
+        return Assign(name, expr)
+
 
     # Comandos
     def print_cmd(self, expr):
@@ -76,3 +112,4 @@ class LoxTransformer(Transformer):
 
     def BOOL(self, token):
         return Literal(token == "true")
+    

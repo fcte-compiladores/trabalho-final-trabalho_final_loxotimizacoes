@@ -1,6 +1,8 @@
 from abc import ABC
 from dataclasses import dataclass
 from typing import Callable
+from types import SimpleNamespace
+from pprint import pprint
 
 from .ctx import Ctx
 
@@ -116,6 +118,22 @@ class And(Expr):
     Ex.: x and y
     """
 
+    expr: list[Expr]
+
+    def eval(self, ctx):
+        
+        first = self.expr[0].eval(ctx)
+
+        if first == False:
+            return False
+        
+        second = self.expr[1].eval(ctx)
+
+        if second == False:
+            return False
+        
+        return True
+
 
 @dataclass
 class Or(Expr):
@@ -123,6 +141,22 @@ class Or(Expr):
     Uma operação infixa com dois operandos.
     Ex.: x or y
     """
+    expr: list[Expr]
+
+    def eval(self, ctx):
+        print(self.expr, "EXPR")
+
+        first = self.expr[0].eval(ctx)
+
+        if first == True:
+            return True
+        
+        second = self.expr[1].eval(ctx)
+
+        if second == True:
+            return True
+        
+        return False
 
 
 @dataclass
@@ -133,6 +167,14 @@ class UnaryOp(Expr):
     Ex.: -x, !x
     """
 
+    op: Callable[[Value], Value]
+    expr: Expr
+
+    def eval(self, ctx: Ctx):
+        print("EXPR:", self.expr)
+        value = self.expr.eval(ctx)
+        print("VALUE:",value)
+        return self.op(value)
 
 @dataclass
 class Call(Expr):
@@ -141,18 +183,19 @@ class Call(Expr):
 
     Ex.: fat(42)
     """
-    name: str
-    params: list[Expr]
+    node: Expr
+    args: list[Expr]
     
     def eval(self, ctx: Ctx):
-        func = ctx[self.name]
-        params = []
-        for param in self.params:
-            params.append(param.eval(ctx))
-        
+        print("ARGS::", self.args)
+        func = self.node.eval(ctx)
+        args = [arg.eval(ctx) for arg in self.args]
+
+
         if callable(func):
-            return func(*params)
-        raise TypeError(f"{self.name} não é uma função!")
+            return func(*args)
+        else:
+            raise TypeError(f"{self.node.name} não é uma função!")
 
 
 @dataclass
@@ -180,6 +223,16 @@ class Assign(Expr):
 
     Ex.: x = 42
     """
+    name: Var
+    expr: Expr
+
+    def eval(self, ctx: Ctx):
+        if (self.name.name in ctx):
+            value = self.expr.eval(ctx)
+            ctx[self.name.name] = value
+            return value
+        else:
+            raise NameError(f"variável {self.name.name} não existe!")
 
 
 @dataclass
@@ -189,6 +242,20 @@ class Getattr(Expr):
 
     Ex.: x.y
     """
+    obj: Expr
+    name: str
+
+    def eval(self, ctx: Ctx):
+        obj = self.obj.eval(ctx)
+
+        if isinstance(obj, dict):
+            if self.name in obj:
+                return obj[self.name]
+            raise AttributeError(f"Atributo {self.name} não encontrado no objeto {type(obj).__name__}")
+        
+        if hasattr(obj, self.name):
+            return getattr(obj, self.name)
+        raise TypeError(f"Não é um objeto")
 
 
 @dataclass
@@ -198,6 +265,20 @@ class Setattr(Expr):
 
     Ex.: x.y = 42
     """
+
+    obj: Expr
+    name: str
+    value: Expr
+
+    def eval(self, ctx: Ctx):
+        obj = self.obj.eval(ctx)
+
+        if (hasattr(obj, self.name)):
+            value = self.value.eval(ctx)
+            setattr(obj, self.name, value)
+            return value
+
+        raise AttributeError(f"Atributo {self.name} não encontrado no objeto {type(obj).__name__}")
 
 
 #
@@ -233,6 +314,13 @@ class VarDef(Stmt):
 
     Ex.: var x = 42;
     """
+
+    name: Var
+    expr: Expr
+
+    def eval(self, ctx: Ctx):
+        value = self.expr.eval(ctx)
+        ctx[self.name.name] = value
 
 
 @dataclass
