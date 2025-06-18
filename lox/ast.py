@@ -1,10 +1,8 @@
 from abc import ABC
 from dataclasses import dataclass
 from typing import Callable
-from types import SimpleNamespace
-from pprint import pprint
-
 from .ctx import Ctx
+from .runtime import truthy, LoxReturn, LoxFunction, print
 
 # Declaramos nossa classe base num módulo separado para esconder um pouco de
 # Python relativamente avançado de quem não se interessar pelo assunto.
@@ -90,7 +88,7 @@ class Var(Expr):
 
     def eval(self, ctx: Ctx):
         try:
-            return ctx[self.name]
+            return ctx.__getitem__(self.name)
         except KeyError:
             raise NameError(f"variável {self.name} não existe!")
 
@@ -144,8 +142,6 @@ class Or(Expr):
     expr: list[Expr]
 
     def eval(self, ctx):
-        print(self.expr, "EXPR")
-
         first = self.expr[0].eval(ctx)
 
         if first == True:
@@ -171,9 +167,7 @@ class UnaryOp(Expr):
     expr: Expr
 
     def eval(self, ctx: Ctx):
-        print("EXPR:", self.expr)
         value = self.expr.eval(ctx)
-        print("VALUE:",value)
         return self.op(value)
 
 @dataclass
@@ -187,7 +181,6 @@ class Call(Expr):
     args: list[Expr]
     
     def eval(self, ctx: Ctx):
-        print("ARGS::", self.args)
         func = self.node.eval(ctx)
         args = [arg.eval(ctx) for arg in self.args]
 
@@ -306,6 +299,11 @@ class Return(Stmt):
     Ex.: return x;
     """
 
+    expr: Expr
+
+    def eval(self, ctx): 
+        raise LoxReturn(self.expr.eval(ctx))
+
 
 @dataclass
 class VarDef(Stmt):
@@ -315,12 +313,12 @@ class VarDef(Stmt):
     Ex.: var x = 42;
     """
 
-    name: Var
+    var: Var
     expr: Expr
 
     def eval(self, ctx: Ctx):
         value = self.expr.eval(ctx)
-        ctx[self.name.name] = value
+        ctx.var_def(self.var.name, value)
 
 
 @dataclass
@@ -331,14 +329,15 @@ class If(Stmt):
     Ex.: if (x > 0) { ... } else { ... }
     """
 
-
-@dataclass
-class For(Stmt):
-    """
-    Representa um laço de repetição.
-
-    Ex.: for (var i = 0; i < 10; i++) { ... }
-    """
+    cond: Expr
+    then: Expr
+    not_then: Expr
+    
+    def eval(self, ctx: Ctx):
+        if(truthy(self.cond.eval(ctx))):
+            self.then.eval(ctx)
+        else:
+            self.not_then.eval(ctx)
 
 
 @dataclass
@@ -349,6 +348,17 @@ class While(Stmt):
     Ex.: while (x > 0) { ... }
     """
 
+    cond: Expr
+    then: Expr
+
+    def eval(self, ctx: Ctx):
+        cond = self.cond.eval(ctx)
+        
+        if (truthy(cond)):
+            self.then.eval(ctx)
+            self.eval(ctx)
+        
+
 
 @dataclass
 class Block(Node):
@@ -358,6 +368,12 @@ class Block(Node):
     Ex.: { var x = 42; print x;  }
     """
 
+    statements: list[Stmt]
+
+    def eval(self, ctx: Ctx):
+        ctx = ctx.push({}) 
+        for stmt in self.statements:
+            stmt.eval(ctx)
 
 @dataclass
 class Function(Stmt):
@@ -366,6 +382,21 @@ class Function(Stmt):
 
     Ex.: fun f(x, y) { ... }
     """
+
+    identifier: str
+    args: list[str]
+    body: Expr
+
+    def eval(self, ctx: Ctx):
+        loxFn = LoxFunction(
+            name=self.identifier,
+            args=self.args,
+            body=[self.body],
+            ctx=ctx
+        )
+
+        ctx.var_def(self.identifier, loxFn)
+        return loxFn
 
 
 @dataclass

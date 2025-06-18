@@ -12,7 +12,7 @@ from lark import Transformer, v_args
 
 from . import runtime as op
 from .ast import *
-from pprint import pprint
+from rich import print
 
 
 def op_handler(op: Callable):
@@ -47,6 +47,23 @@ class LoxTransformer(Transformer):
     le = op_handler(op.le)
     eq = op_handler(op.eq)
     ne = op_handler(op.ne)
+
+    # Declarations
+    def var_def(self, name: Var, expr: Expr = None):
+        if expr is None:
+            expr = Literal(None)
+        return VarDef(name, expr)
+
+    def block(self, *statements: Expr):
+        return Block(list(statements))
+    
+    def fun_def(self, identifier: Var, fun_args = list(), body: Expr = None):
+        return Function(identifier.name, fun_args, body)
+
+    def fun_args(self, *args):
+        params = [arg.name for arg in args]
+
+        return params
 
     # Outras expressões
     def call(self, node: Var | Getattr, args: list=[]):
@@ -84,9 +101,6 @@ class LoxTransformer(Transformer):
     def logic_and(self, *args: list[Expr]):
         return And(args)
     
-    def decl(self, name: Var, expr: Expr):
-        return VarDef(name, expr)
-    
     def assign(self, name: Var, expr: Expr):
         return Assign(name, expr)
 
@@ -95,6 +109,45 @@ class LoxTransformer(Transformer):
     def print_cmd(self, expr):
         return Print(expr)
 
+    def if_cmd(self, cond: Expr, then: Expr, not_then: Expr = None):
+        if not_then is None:
+            not_then = Literal(None) 
+        return If(cond, then, not_then)
+    
+    def while_cmd(self, cond: Expr, then: Expr):
+        return While(cond, then)
+    
+    def for_cmd(self, for_args: tuple, body: Expr):
+        init, cond, incr = for_args
+
+        return Block(
+            [
+                init,
+                While(
+                    cond,
+                    Block(
+                        [
+                            body,
+                            incr,
+                        ]
+                    ),
+                ),
+            ]
+        )
+    
+    def for_args(self, arg1, arg2, arg3):
+        return (arg1, arg2, arg3)
+    
+    def opt_expr(self, arg: Expr = None):
+        if arg is None:
+            arg = Literal(True)
+        return arg
+    
+    def return_cmd(self, expr: Expr = None):
+        if expr is None:
+            expr = Literal(None)
+        return Return(expr)
+    
     def VAR(self, token):
         name = str(token)
         return Var(name)
