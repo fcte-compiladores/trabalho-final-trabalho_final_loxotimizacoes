@@ -28,7 +28,7 @@ Esse trabalho aplica as seguintes otimizações no compilador original:
 <div style="display: flex;align-items: center; justify-content: center;gap:1rem;">
 
 <div style="display: flex;align-items:center;flex-direction: column">
-<img src="https://github.com/fabiommendes.png" style="border-radius: 999px; width: 60px; margin: 0 0 .5rem 0;/>
+<img src="https://github.com/fabiommendes.png" style="border-radius: 999px; width: 60px; margin: 0 0 .5rem 0;"/>
 <a href="https://github.com/fabiommendes" target="_blank">Fabio M Mendes</a>
 <span>Orientador</span>
 </div>
