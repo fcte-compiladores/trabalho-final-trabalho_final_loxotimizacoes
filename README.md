@@ -25,23 +25,23 @@ Esse trabalho aplica as seguintes otimizações no compilador original:
 
 ## Participantes
 
-<div style="display: flex;align-items: center; justify-content: center;gap:1rem;">
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/fabiommendes.png" width="60" style="border-radius: 50%;" /><br/>
+      <a href="https://github.com/fabiommendes" target="_blank">Fabio M Mendes</a><br/>
+      <sub>Orientador</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/sluucke.png" width="60" style="border-radius: 50%;" /><br/>
+      <a href="https://github.com/sluucke" target="_blank">David William</a><br/>
+      <sub>Discente</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/yasmindayrell.png" width="60" style="border-radius: 50%;" /><br/>
+      <a href="https://github.com/yasmindayrell" target="_blank">Yasmin Dayrell</a><br/>
+      <sub>Discente</sub>
+    </td>
+  </tr>
+</table>
 
-<div style="display: flex;align-items:center;flex-direction: column">
-<img src="https://github.com/fabiommendes.png" style="border-radius: 999px; width: 60px; margin: 0 0 .5rem 0;"/>
-<a href="https://github.com/fabiommendes" target="_blank">Fabio M Mendes</a>
-<span>Orientador</span>
-</div>
-
-<div style="display: flex;align-items:center;flex-direction: column;">
-<img src="https://github.com/sluucke.png" style="border-radius: 999px; width: 60px; margin: 0 0 .5rem 0;" />
-<a href="https://github.com/sluucke" target="_blank">David William</a>
-<span>Discente</span>
-</div>
-
-<div style="display: flex;align-items:center;flex-direction: column;">
-<img src="https://github.com/yasmindayrell.png" style="border-radius: 999px; width: 60px; margin: 0 0 .5rem 0;" />
-<a href="https://github.com/yasmindayrell" target="_blank">David William</a>
-<span>Discente</span>
-</div>
-</div>
