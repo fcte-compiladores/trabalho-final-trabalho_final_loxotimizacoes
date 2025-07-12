@@ -9,7 +9,7 @@ from .ctx import Ctx
 from .errors import SemanticError
 from .node import Node
 from .parser import lex, parse, parse_cst, parse_expr
-from .runtime import ConstantPropagation
+from .optimizations import ConstantPropagation
 
 __all__ = [
     "Ctx",

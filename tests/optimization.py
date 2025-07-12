@@ -1,20 +1,12 @@
-from lox import ast
-from lox import runtime
+from lox import optimizations
 from lox import parse
 from rich import print
 
 def test(src: str):
   ast_program = parse(src)
   print(f"Original: {ast_program.pretty()}")
-  runtime.ConstantPropagation().propagate(ast_program)
+  optimizations.ConstantPropagation().propagate(ast_program)
   print(f"Optimized: {ast_program.pretty()}")
-
-def test_unreach(src: str):
-   ast_program = parse(src)
-   print(f"Original: {ast_program.pretty()}")
-   runtime.UnreachableCodeOptimization().optimize(ast_program)
-   print(f"Optimized: {ast_program.pretty()}")
-
 
 
 src1_simple = """
@@ -23,7 +15,7 @@ var y = 1 + x; // expect to perform 1 + 1 then folding and y = 2;
 """
 
 srcs = [
-  src1,
+  src1_simple,
   # src2,
   # src3,
 ]

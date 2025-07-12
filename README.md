@@ -16,13 +16,13 @@ Primeiro passo é ter o [uv](https://docs.astral.sh/uv) instalado em seu computa
 
 Na pasta `tests` existem alguns arquivos de teste que roda o interpretador com e sem as otimizações mostrando um benchmark com as difereças e as AST's correspondentes.
 
-As otimizações estão concentradas no final do arquivo `lox/runtime.py`, funcionam como um 'plugin' para a AST.
+As otimizações estão concentradas no final do arquivo `lox/optimizations.py`, funcionam como um 'plugin' para a AST.
 
 
 Exemplo:
 
 ```py
-from runtime import ConstantPropagation
+from optimizations import ConstantPropagation
 
 ast = ...
 
