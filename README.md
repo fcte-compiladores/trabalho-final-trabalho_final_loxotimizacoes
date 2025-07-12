@@ -10,6 +10,27 @@ Boa parte da implementação atual do projeto foi realizada durante o semestre, 
 
 Este trabalho implementa o algumas otimizações, conteúdo sobre compiladores que não é abordado na disciplina
 
+## Como executar?
+
+Primeiro passo é ter o [uv](https://docs.astral.sh/uv) instalado em seu computador, depois é só rodar `uv run` para instalar os pacotes.
+
+Na pasta `tests` existem alguns arquivos de teste que roda o interpretador com e sem as otimizações mostrando um benchmark com as difereças e as AST's correspondentes.
+
+As otimizações estão concentradas no final do arquivo `lox/runtime.py`, funcionam como um 'plugin' para a AST.
+
+
+Exemplo:
+
+```py
+from runtime import ConstantPropagation
+
+ast = ...
+
+ConstantPropagation().propagate(ast)
+
+print(ast.pretty()) // ast otimizada com constant propagation + folding
+```
+
 ### Otimizações
 
 Esse trabalho aplica as seguintes otimizações no compilador original:
