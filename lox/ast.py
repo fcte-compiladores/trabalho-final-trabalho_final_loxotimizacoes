@@ -406,3 +406,13 @@ class Class(Stmt):
 
     Ex.: class B < A { ... }
     """
+
+class NoOp(Stmt):
+    """
+    Representa uma instrução vazia.
+
+    Ex.: ;
+    """
+
+    def eval(self, ctx: Ctx):
+        pass

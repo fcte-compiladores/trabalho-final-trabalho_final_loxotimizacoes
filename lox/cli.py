@@ -58,6 +58,12 @@ def make_argparser():
         action="store_true",
         help="Mostra o código fonte do arquivo de entrada.",
     )
+    parser.add_argument(
+        '-o',
+        '--optimize',
+        action='store_true',
+        help="Habilita otimizações no código fonte antes da execução.",
+    )
     return parser
 
 

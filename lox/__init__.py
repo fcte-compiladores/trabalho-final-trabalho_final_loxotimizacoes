@@ -9,6 +9,7 @@ from .ctx import Ctx
 from .errors import SemanticError
 from .node import Node
 from .parser import lex, parse, parse_cst, parse_expr
+from .runtime import ConstantPropagation
 
 __all__ = [
     "Ctx",
@@ -27,6 +28,7 @@ __all__ = [
 def eval(
     src: str | Node,
     env: Ctx | dict[str, Value] | None = None,
+    optmize: bool = True,
     skip_validation: bool = False,
 ) -> Value:
     """
@@ -54,9 +56,11 @@ def eval(
 
     if not skip_validation:
         ast.validate_tree()
+    
+    propagator = ConstantPropagation()
 
     try:
-        return ast.eval(env)
+        return ast.eval(env);
     except Exception as e:
         print(f"Programa terminou com um erro: {e}")
         print("Variáveis:", env)

@@ -1,42 +1,47 @@
-# Linguagem Lox
-Este é o código fonte para o interpretador de Lox que será desenvolvido ao 
-longo do curso.
+# Trabalho Compiladores 1
 
-A única dependência externa é a biblioteca Lark. Use o método 
-preferido de instalação do seu sistema para instalá-la. De modo geral, recomendo 
-usar a ferramenta [uv](https://docs.astral.sh/uv/). Siga as instruções de 
-instalação por lá e use o interpretador com o comando
 
-    $ uv run lox
-    
-## Exercícios
+## Linguagem Lox
 
-Os exercícios são adicionados na pasta "exercícios" e podem ser arquivos Python
-ou Markdown com as instruções de como proceder para resolução dos mesmos. 
+Este é o código fonte de um interpretetador da linguagem de programação [Lox](https://craftinginterpreters.com/the-lox-language.html) desenvolvido durante o curso de `Compiladores 1` na Universidade de Brasilia.
 
-Geralmente os arquivos Python devem ser editados e os arquivos Markdown descrevem
-instruções sobre como modificar o código do módulo lox para cumprir o comando do
-exercício.
 
-A maior parte dos exercícios é testada automaticamente utilizando o Pytest. Neste
-caso, existirá um arquivo correspondente na pasta tests com o nome `test_<nome do exercício>.py`. O Pytest detecta automaticamente estes arquivos e sabe o que 
-fazer a partir daí.
+Boa parte da implementação atual do projeto foi realizada durante o semestre, este repositório é o mesmo dos exercícios realizados na disciplina.
 
-## Rodando testes
+Este trabalho implementa o algumas otimizações, conteúdo sobre compiladores que não é abordado na disciplina
 
-Os testes automáticos podem ser executados com o comando
+### Otimizações
 
-    $ uv run pytest
+Esse trabalho aplica as seguintes otimizações no compilador original:
 
-Se quiser maior controle, estude as opções que o pytest disponibiliza passando
-a flag `--help`. O comando abaixo, por exemplo, mostra somente a primeira falha e
-limita os testes ao módulo lex_numeros.
+- Constant Propagation
 
-    $ uv run pytest --maxfail=1 -k lex_numeros
+- Constant Folding
 
-Podemos executar a suite de testes completa, incluindo os testes de validação na pasta exemplos, usando 
+- Deadline Code
+  - Unreach code elimination
 
-    $ uv run pytest --full-suite
+- For-loops unroll
 
-Note que são **muitos** testes e vários deles estão falhando no estado atual do 
-interpretador.
+## Participantes
+
+<div style="display: flex;align-items: center; justify-content: center;gap:1rem;">
+
+<div style="display: flex;align-items:center;flex-direction: column">
+<img src="https://github.com/fabiommendes.png" style="border-radius: 999px; width: 60px; margin: 0 0 .5rem 0;/>
+<a href="https://github.com/fabiommendes" target="_blank">Fabio M Mendes</a>
+<span>Orientador</span>
+</div>
+
+<div style="display: flex;align-items:center;flex-direction: column;">
+<img src="https://github.com/sluucke.png" style="border-radius: 999px; width: 60px; margin: 0 0 .5rem 0;" />
+<a href="https://github.com/sluucke" target="_blank">David William</a>
+<span>Discente</span>
+</div>
+
+<div style="display: flex;align-items:center;flex-direction: column;">
+<img src="https://github.com/yasmindayrell.png" style="border-radius: 999px; width: 60px; margin: 0 0 .5rem 0;" />
+<a href="https://github.com/yasmindayrell" target="_blank">David William</a>
+<span>Discente</span>
+</div>
+</div>

@@ -12,7 +12,6 @@ from lark import Transformer, v_args
 
 from . import runtime as op
 from .ast import *
-from rich import print
 
 
 def op_handler(op: Callable):
@@ -90,7 +89,7 @@ class LoxTransformer(Transformer):
         return Setattr(obj, name, value)
 
     def not_(self, expr: Expr):
-        return UnaryOp(op.not_, expr)
+        return UnaryOp(lambda x: not truthy(x), expr)
     
     def neg(self, expr: Expr):
         return UnaryOp(op.neg, expr)
