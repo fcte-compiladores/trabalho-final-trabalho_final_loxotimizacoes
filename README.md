@@ -1,86 +1,150 @@
-# Trabalho Compiladores 1
+# 🔧 Otimizações em Interpretador da Linguagem Lox
 
+## 👥 Integrantes
+
+| Nome                          | Matrícula | Turma   |
+| ----------------------------- | --------- | ------- |
+| David William Lemos Ferreira  | 232001649 | 18h     |
+| Yasmin Dayrell Albuquerque    | 232014226 | 16h     |
+
+> Orientador: [Fabio M. Mendes](https://github.com/fabiommendes)
+
+## 📌 Introdução
 
 ## Linguagem Lox
 
 Este é o código fonte de um interpretetador da linguagem de programação [Lox](https://craftinginterpreters.com/the-lox-language.html) desenvolvido durante o curso de `Compiladores 1` da Universidade de Brasilia.
 
+Ele estende um interpretador já desenvolvido ao longo do curso com **otimizações de código-fonte baseadas em análise da AST (Abstract Syntax Tree)**.
 
-Boa parte da implementação atual do projeto foi realizada durante o semestre, este repositório é o mesmo dos exercícios realizados na disciplina.
+## Otimizações
 
-Este trabalho implementa o algumas otimizações, conteúdo sobre compiladores que não é abordado na disciplina
+As otimzações realizadas no interpretador incluem:
 
-## Como executar?
+- 🔁 **Constant Propagation**: substituição de variáveis constantes diretamente por seus valores.
+- 🔢 **Constant Folding**: avaliação de expressões constantes em tempo de compilação.
+- 🗑️ **Dead Code Elimination**:
+  - **Unused Variables**: remoção de variáveis nunca utilizadas.
+  - ~~**Unreachable Code**~~: ainda não implementado.
 
-Primeiro passo é ter o [uv](https://docs.astral.sh/uv) instalado em seu computador.
+Outras otimizações planejadas (não implementadas):
 
-**Instalar os pacotes**
-  - Execute o comando `uv run` para instalar os pacotes do projeto
+- ⏳ **Loop Unrolling**
+- ⏳ **Inline Expansion**
 
-**Rodar os testes**
+As otimizações são aplicadas diretamente sobre a AST utilizando classes específicas localizadas no arquivo `lox/optimizations.py`.
 
-Na pasta `tests` existem alguns arquivos de teste, o principal deles é o `tests/optimization.py`, ele roda o intepretador com os códigos na pasta `exemplos/optimization`, mostrando as otimizações realizadas e um benchmark comparativo. Para executar arquivo siga as instruções abaixo:
+### Exemplo de uso
 
+```python
+from optimizations import ConstantPropagation
+
+ast = ...  # AST original
+
+ConstantPropagation().propagate(ast)
+
+print(ast.pretty())  # AST otimizada
+```
+
+
+## 🛠️ Instalação
+
+O projeto utiliza o gerenciador [uv](https://docs.astral.sh/uv), então o primeiro passo é ter ele instalado.
+
+**1. Clonar o repositório:**
+```bash
+git clone https://github.com/fcte-compiladores/trabalho-final-trabalho_final_loxotimizacoes.git
+
+cd trabalho-final-trabalho_final_loxotimizacoes
+```
+
+
+**2. Instalar os pacotes**
+
+Inicie o ambiente uv e intale os pacotes:
+
+``` bash
+uv venv
+uv run
+```
+
+**3. Rodar os testes**
+
+Na pasta `tests` existem alguns arquivos, o principal deles é o `tests/optimization.py`, ele roda o intepretador com os códigos na pasta `exemplos/optimization`, mostrando as otimizações realizadas e um benchmark comparativo. Para executar arquivo siga as instruções abaixo:
 
 Execute o arquivo:
 ```
 uv run tests/optimization.py
-# ou python3 tests/optimization.py
 ```
 
-O script irá criar um arquivo `tests/results.txt`, que contém o resultado dos testes, abra com `less -R tests/results.txt` ou `cat tests/results.txt`.
+O script irá criar um arquivo `tests/results.txt`, que contém o resultado dos testes.
 
-*Importante: O arquivo results.txt tem caracteres de cor ANSII, portanto devem ser abertos com algum programa compativel para leitura*
-
-Exemplo:
-
-```py
-from optimizations import ConstantPropagation
-
-ast = ...
-
-ConstantPropagation().propagate(ast)
-
-print(ast.pretty()) // ast otimizada com constant propagation + folding
+Para visualizar os resultados execute:
+```
+less -R tests/results.txt
+# ou
+cat tests/results.txt
 ```
 
-### Otimizações
+> *⚠️ Importante: O arquivo `results.txt` usa caracteres ANSI (cores), recomenda-se a leitura com programas adequados*
+> 
 
-Esse trabalho aplica as seguintes otimizações no interpretador original:
+## 💡 Exemplos
 
-- Constant Propagation
+A pasta [`exemplos/optimization`](./exemplos/optimization) contém os exemplos utilizados para testes das otimizações. Subpastas:
 
-- Constant Folding
+- `propagation/`: testes de propagação de constantes.
+- `unsed_vars/`: testes de variáveis não utilizadas.
+- `all/`: testes com múltiplas otimizações aplicadas.
 
-- Dead code
-  - Unsed variables
-  - ~~Unreach code~~
+Cada exemplo serve como benchmark incremental, com dificuldades crescentes.
 
-- ~~For-loops unroll~~
-  - Soon...
-  
-- ~~Inline Expansion~~
-  - Soon...
 
-## Participantes
 
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="https://github.com/fabiommendes.png" width="60" style="border-radius: 50%;" /><br/>
-      <a href="https://github.com/fabiommendes" target="_blank">Fabio M Mendes</a><br/>
-      <sub>Orientador</sub>
-    </td>
-    <td align="center">
-      <img src="https://github.com/sluucke.png" width="60" style="border-radius: 50%;" /><br/>
-      <a href="https://github.com/sluucke" target="_blank">David William</a><br/>
-      <sub>Discente</sub>
-    </td>
-    <td align="center">
-      <img src="https://github.com/yasmindayrell.png" width="60" style="border-radius: 50%;" /><br/>
-      <a href="https://github.com/yasmindayrell" target="_blank">Yasmin Dayrell</a><br/>
-      <sub>Discente</sub>
-    </td>
-  </tr>
-</table>
+## 📁 Estrutura do Código
 
+```
+.
+├── exemplos
+│   └── optimization
+│       ├── all
+│       ├── propagation
+│       └── unsed_vars
+├── lox
+│   ├── __init__.py
+│   ├── __main__.py
+│   ├── ast.py
+│   ├── cli.py
+│   ├── ctx.py
+│   ├── errors.py
+│   ├── grammar.lark
+│   ├── node.py
+│   ├── optimizations.py
+│   ├── parser.py
+│   ├── runtime.py
+│   ├── testing.py
+│   └── transformer.py
+├── pyproject.toml
+├── pytest.ini
+├── README.md
+├── tests
+│   ├── configs.py
+│   ├── optimization.py
+│   └── results.txt
+└── uv.lock
+```
+
+
+## 📚 Referências
+- [**IBM - Otimization Techniques**](https://www.ibm.com/docs/en/aix/7.2.0?topic=tuning-compiler-optimization-techniques) - Usado como exploratório para descobrir tecnicas de otimizções
+- [**Geek for Geeks**](https://www.geeksforgeeks.org/compiler-design/code-optimization-in-compiler-design/) - Principal base para aplicação das otimizações
+- [**Medium - Guannan Shen**](https://medium.com/@guannan.shen.ai/compiler-optimizations-46db19221947) - Explica algumas tecnicas de otimização que o GCC utiliza
+- [**Crafting Interpreters**](https://craftinginterpreters.com/) – Bob Nystrom: principal base teórica e prática para o interpretador da linguagem Lox.
+- [**Repositório da disciplina**](https://github.com/fabiommendes/lox-base): usado como base do interpretador.
+- **[Implementações próprias](https://github.com/sluucke/lox-compiler)**: as otimizações foram inteiramente desenvolvidas pela equipe como extensão do interpretador.
+
+## 🐞 Bugs / Limitações / Problemas Conhecidos
+
+- ❌ Otimizações não incluem ainda análise de código inatingível
+- 🔜 Outras otimizações (unroll, inline) ainda estão em planejamento
+- 🛠️ Melhorias futuras podem incluir mais padrões da linguagem
