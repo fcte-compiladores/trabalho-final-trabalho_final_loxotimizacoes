@@ -12,12 +12,25 @@ Este trabalho implementa o algumas otimizações, conteúdo sobre compiladores q
 
 ## Como executar?
 
-Primeiro passo é ter o [uv](https://docs.astral.sh/uv) instalado em seu computador, depois é só rodar `uv run` para instalar os pacotes.
+Primeiro passo é ter o [uv](https://docs.astral.sh/uv) instalado em seu computador.
 
-Na pasta `tests` existem alguns arquivos de teste que roda o interpretador com e sem as otimizações mostrando um benchmark com as difereças e as AST's correspondentes.
+**Instalar os pacotes**
+  - Execute o comando `uv run` para instalar os pacotes do projeto
 
-As otimizações estão concentradas no final do arquivo `lox/optimizations.py`, funcionam como um 'plugin' para a AST.
+**Rodar os testes**
 
+Na pasta `tests` existem alguns arquivos de teste, o principal deles é o `tests/optimization.py`, ele roda o intepretador com os códigos na pasta `exemplos/optimization`, mostrando as otimizações realizadas e um benchmark comparativo. Para executar arquivo siga as instruções abaixo:
+
+
+Execute o arquivo:
+```
+uv run tests/optimization.py
+# ou python3 tests/optimization.py
+```
+
+O script irá criar um arquivo `tests/results.txt`, que contém o resultado dos testes, abra com `less -R tests/results.txt` ou `cat tests/results.txt`.
+
+*Importante: O arquivo results.txt tem caracteres de cor ANSII, portanto devem ser abertos com algum programa compativel para leitura*
 
 Exemplo:
 
@@ -39,10 +52,15 @@ Esse trabalho aplica as seguintes otimizações no interpretador original:
 
 - Constant Folding
 
-- Dead Code
-  - Unreach code elimination
+- Dead code
+  - Unsed variables
+  - ~~Unreach code~~
 
-- For-loops unroll
+- ~~For-loops unroll~~
+  - Soon...
+  
+- ~~Inline Expansion~~
+  - Soon...
 
 ## Participantes
 
