@@ -48,10 +48,10 @@ class LoxTransformer(Transformer):
     ne = op_handler(op.ne)
 
     # Declarations
-    def var_def(self, name: Var, expr: Expr = None):
+    def var_def(self, var: Var, expr: Expr = None):
         if expr is None:
             expr = Literal(None)
-        return VarDef(name, expr)
+        return VarDef(var.name, expr)
 
     def block(self, *statements: Expr):
         return Block(list(statements))

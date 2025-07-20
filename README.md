@@ -33,13 +33,13 @@ print(ast.pretty()) // ast otimizada com constant propagation + folding
 
 ### Otimizações
 
-Esse trabalho aplica as seguintes otimizações no compilador original:
+Esse trabalho aplica as seguintes otimizações no interpretador original:
 
 - Constant Propagation
 
 - Constant Folding
 
-- Deadline Code
+- Dead Code
   - Unreach code elimination
 
 - For-loops unroll

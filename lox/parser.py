@@ -12,6 +12,7 @@ from lark import Lark, Token, Tree
 
 from .ast import Expr, Program
 from .transformer import LoxTransformer
+from .ctx import Ctx
 
 DIR = Path(__file__).parent
 GRAMMAR_PATH = DIR / "grammar.lark"
@@ -46,6 +47,7 @@ def parse(src: str) -> Program:
     assert isinstance(tree, Program), f"Esperava um Program, mas recebi {type(tree)}"
     tree.validate_tree()
     tree.desugar_tree()
+
     return tree
 
 

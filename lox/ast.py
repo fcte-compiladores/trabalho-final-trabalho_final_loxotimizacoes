@@ -313,12 +313,12 @@ class VarDef(Stmt):
     Ex.: var x = 42;
     """
 
-    var: Var
+    name: str
     expr: Expr
 
     def eval(self, ctx: Ctx):
         value = self.expr.eval(ctx)
-        ctx.var_def(self.var.name, value)
+        ctx.var_def(self.name, value)
 
 
 @dataclass
@@ -407,12 +407,15 @@ class Class(Stmt):
     Ex.: class B < A { ... }
     """
 
+@dataclass
 class NoOp(Stmt):
     """
     Representa uma instrução vazia.
 
     Ex.: ;
     """
+
+    noop: bool = True # TODO: remover isso, coloquei por que se não tiver argumentos da erro no node algo com __annotations__
 
     def eval(self, ctx: Ctx):
         pass

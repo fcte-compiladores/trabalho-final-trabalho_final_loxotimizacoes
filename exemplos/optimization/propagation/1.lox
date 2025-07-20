@@ -1,0 +1,5 @@
+// optimizations: propagation
+// description: Veja que o acesso de x foi substituído pelo valor 42, pois ele é uma constante.
+
+var x = 42;
+x; // propaga x, ou seja, substitui o acesso a x pelo seu valor 42.

@@ -1,0 +1,7 @@
+
+// optimizations: propagation, unsed_vars
+// description: Exemplo de propagação de variáveis e remoção de variáveis não utilizadas.
+
+var x = 42; // deve ser removido após propagação
+var y = 99; // removido por que não é utilizado
+x; // propagado então deve ficar: 42.0

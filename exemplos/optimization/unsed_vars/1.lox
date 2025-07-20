@@ -1,0 +1,6 @@
+// optimizations: unsed_vars
+// description: Veja que y foi apagado pois ele não é utilizado após a sua definição.
+
+var x = 42;
+var y = 99; // y é uma variável não utilizada, ela deve ser removida.
+x;

@@ -1,0 +1,5 @@
+// optimizations: propagation
+// description: Aqui aplicamos folding + propagation.\nVeja que em x temos uma expressão matematica que pode ser avaliada como constante, então o valor de x é 141.\nPrimeiro ocorre a propagação de y, e depois o folding da expressão.
+
+var x = 1;
+var y = 1 + x; // y = 1 + 1 -> y = 2
