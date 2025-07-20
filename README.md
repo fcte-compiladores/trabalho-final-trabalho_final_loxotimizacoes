@@ -3,7 +3,7 @@
 
 ## Linguagem Lox
 
-Este é o código fonte de um interpretetador da linguagem de programação [Lox](https://craftinginterpreters.com/the-lox-language.html) desenvolvido durante o curso de `Compiladores 1` na Universidade de Brasilia.
+Este é o código fonte de um interpretetador da linguagem de programação [Lox](https://craftinginterpreters.com/the-lox-language.html) desenvolvido durante o curso de `Compiladores 1` da Universidade de Brasilia.
 
 
 Boa parte da implementação atual do projeto foi realizada durante o semestre, este repositório é o mesmo dos exercícios realizados na disciplina.
