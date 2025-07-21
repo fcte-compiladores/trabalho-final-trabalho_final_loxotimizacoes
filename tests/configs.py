@@ -99,11 +99,11 @@ def printCode(src: str):
   
   prints.append("├" + "─" * max_length_with_lines_no + "┤")
 
-  for line in lines:
+  for i, line in enumerate(lines):
     line = line.rstrip()
     if len(line) > max_length:
       line = line[:max_length - 3] + "..."
-    lineno = lines.index(line) + 1
+    lineno = i + 1
     prints.append(f"│ {lineno:>2} {line:<{max_length}} │")
   prints.append("└" + "─" * max_length_with_lines_no + "┘")
   

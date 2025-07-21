@@ -1,0 +1,15 @@
+// optimizations: propagation,unsed_vars
+// description: Exemplo de um código simplificado de uma lanchonete, com algumas variáveis não utilizadas e expressões a mais.
+
+  //item //valor
+var pao = 2.0;
+var biscoito = 5.0;
+var bolo = 10.0;
+var bala = 0.5;
+var item_cancelado1 = 7;
+var item_cancelado2 = 3;
+var desconto = 2;
+
+var valor_pago = pao + biscoito + bolo + bala - desconto;
+
+print valor_pago;

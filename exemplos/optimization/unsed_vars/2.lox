@@ -1,0 +1,10 @@
+// optimizations: unsed_vars
+// description: Exemplo de eliminção de variáveis em diferentes casos.
+
+var w = 3;
+var x = w * 1;
+var y = w * 2;
+var z = w * 3; 
+var will_print = w * 4; 
+
+print will_print;
