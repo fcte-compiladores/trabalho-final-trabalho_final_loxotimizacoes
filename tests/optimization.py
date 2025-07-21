@@ -100,6 +100,7 @@ def test_unsed_vars(src: str, ast_program=None):
   if ast_program is None:
     ast_program = parse(src)
   print(f"[red][bold][UNSED VARS][/bold] - AST Original:[/red]\n{ast_program.pretty()}")
+
   optimizations.optimize_ast(ast_program, optimizations=["unsed_vars"])
   
   print(f"[cyan][bold][UNSED VARS][/bold] - AST Optimized:[/cyan]\n{ast_program.pretty()}")
@@ -126,7 +127,7 @@ def print_test(test: dict, index: int, benchmark: bool = True):
 
 def test(tests: list[dict], print_results=False, output_file="tests/results.txt", benchmark=True):
   if not print_results:
-    with open("tests/results.txt", "w"):
+    with open(output_file, "w"):
       pass
   for [index, test] in enumerate(tests, start=1):
       print (f"Testing source: {test['relative_path']}")
