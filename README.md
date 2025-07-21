@@ -112,7 +112,12 @@ A pasta [`exemplos/optimization`](./exemplos/optimization) contém os exemplos u
 
 Cada exemplo serve como benchmark incremental, com dificuldades crescentes.
 
+## 🐞 Bugs / Limitações / Problemas Conhecidos
 
+- ❌ Otimizações não incluem ainda análise de código inatingível
+- ❌ **Otimizações NÃO seguras podem ocorrer** devido a falta de heurística no otimizador
+- 🔜 Outras otimizações (unroll, inline) ainda estão em planejamento
+- 🛠️ Uma melhoria futura é melhorar a heurística do otimizador para conseguir fazer otimizações que não são feitas no momento por que não são seguras. (ex: Constant Propagation em Funções e Loops)
 
 ## 📁 Estrutura do Código
 
@@ -155,10 +160,3 @@ Cada exemplo serve como benchmark incremental, com dificuldades crescentes.
 - [**Crafting Interpreters**](https://craftinginterpreters.com/) – Bob Nystrom: principal base teórica e prática para o interpretador da linguagem Lox.
 - [**Repositório da disciplina**](https://github.com/fabiommendes/lox-base): usado como base do interpretador.
 - **[Implementações próprias](https://github.com/sluucke/lox-compiler)**: as otimizações foram inteiramente desenvolvidas pela equipe como extensão do interpretador.
-
-## 🐞 Bugs / Limitações / Problemas Conhecidos
-
-- ❌ Otimizações não incluem ainda análise de código inatingível
-- ❌ **Otimizações NÃO seguras podem ocorrer** devido a falta de heurística no otimizador
-- 🔜 Outras otimizações (unroll, inline) ainda estão em planejamento
-- 🛠️ Melhorias futuras podem incluir mais padrões da linguagem e heurísticas para otimizações
