@@ -98,6 +98,8 @@ Também é possível rodar um arquivo lox otimizado com a CLI padrão:
 
 ```bash
 uv run lox exemplos/optimization/propagation/3.lox -o
+# ou
+uv run lox --help
 ```
 
 ## 💡 Exemplos
@@ -157,5 +159,6 @@ Cada exemplo serve como benchmark incremental, com dificuldades crescentes.
 ## 🐞 Bugs / Limitações / Problemas Conhecidos
 
 - ❌ Otimizações não incluem ainda análise de código inatingível
+- ❌ **Otimizações NÃO seguras podem ocorrer** devido a falta de heurística no otimizador
 - 🔜 Outras otimizações (unroll, inline) ainda estão em planejamento
-- 🛠️ Melhorias futuras podem incluir mais padrões da linguagem
+- 🛠️ Melhorias futuras podem incluir mais padrões da linguagem e heurísticas para otimizações
