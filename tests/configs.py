@@ -121,7 +121,11 @@ def pretty_test(code: dict, identifier: str) -> str:
     return "".join(toPrint)
 
 def print_benchmark(test: dict, original_ast: ast.Program, ast: ast.Program):
-  print(f"\n[bold][green]Description: {str(test['description']).strip()}[/green][/bold]\n\n")
+  description = str(test["description"]).split("\\n")
+  print("[bold][green]Description:[/green][/bold]")
+  for line in description:
+    print(f"[green][italic]{line.strip()}[/italic][/green]")
+  print("\n")
   print("[bold][italic]Running BENCHMARKS to src code[/italic][/bold]")
   original_bench = test_benchmark(original_ast)
   optimized_bench = test_benchmark(ast)

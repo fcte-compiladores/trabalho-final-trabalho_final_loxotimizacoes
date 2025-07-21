@@ -1,14 +1,12 @@
 // optimizations: propagation
-// description: Exemplo 2
+// description: Testa a propagação de variáveis em escopos aninhados
 
 var x = 5;
 
 {
-  var y = x + 2;
-  print y;
+  var y = x + 2; // y = 7
   {
-    var z = y + 2;
-    print z;
+    var z = y + 2; // 9
   }
 }
 
