@@ -9,7 +9,6 @@ from .ctx import Ctx
 from .errors import SemanticError
 from .node import Node
 from .parser import lex, parse, parse_cst, parse_expr
-from .optimizations import ConstantPropagation
 
 __all__ = [
     "Ctx",
@@ -28,7 +27,7 @@ __all__ = [
 def eval(
     src: str | Node,
     env: Ctx | dict[str, Value] | None = None,
-    optmize: bool = True,
+    optimize: bool = True,
     skip_validation: bool = False,
 ) -> Value:
     """
@@ -41,6 +40,9 @@ def eval(
             Ambiente onde as variáveis serão avaliadas. Se omitido, um novo
             ambiente vazio será criado. Aceita um dicionário mapeando nomes de
             variáveis para seus valores ou uma instância de `Ctx`.
+        optmize:
+            Se `True`, aplica otimizações no AST antes da avaliação, como
+            propagação de constantes e eliminação de variáveis não utilizadas.
         skip_validation:
             Se `True`, ignora a validação do código fonte antes da avaliação.
     """
@@ -57,7 +59,11 @@ def eval(
     if not skip_validation:
         ast.validate_tree()
     
-    propagator = ConstantPropagation()
+    if optimize:
+        from .optimizations import ConstantPropagation, UnsedVarsElimination
+
+        ConstantPropagation().propagate(ast)
+        UnsedVarsElimination().eval(ast)
 
     try:
         return ast.eval(env);

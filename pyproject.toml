@@ -1,10 +1,11 @@
 [project]
 name = "lox"
 version = "0.1.0"
-description = "Interpretador Lox"
+description = "Interpretador Lox - Otimizado"
 readme = "README.md"
 authors = [
     { name = "Fábio Macêdo Mendes", email = "fabiomacedomendes@gmail.com" },
+    { name = "David William Lemos Ferreira", email = "sluuckejoohn@gmail.com" },
 ]
 requires-python = ">=3.10"
 dependencies = [
@@ -15,6 +16,7 @@ dependencies = [
 
 [project.scripts]
 lox = "lox.cli:main"
+optimization = "tests.optimization:main"
 
 [build-system]
 requires = ["hatchling"]

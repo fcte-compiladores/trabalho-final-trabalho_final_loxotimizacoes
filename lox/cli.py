@@ -62,6 +62,7 @@ def make_argparser():
         '-o',
         '--optimize',
         action='store_true',
+        default=False,
         help="Habilita otimizações no código fonte antes da execução.",
     )
     return parser
@@ -98,7 +99,7 @@ def main():
 
     if not args.ast and not args.cst and not args.lex:
         try:
-            lox_eval(source)
+            lox_eval(source, optimize=bool(args.optimize))
         except Exception as e:
             on_error(e, args.pm)
 
@@ -112,6 +113,11 @@ def debug_source(source: str, args):
     """
     if args.ast:
         ast = parse(source)
+        if args.optimize:
+            from .optimizations import ConstantPropagation, UnsedVarsElimination
+
+            ConstantPropagation().propagate(ast)
+            UnsedVarsElimination().eval(ast)
         for node in ast.lark_descendents():
             if isinstance(node, Token):
                 descr = repr(node)

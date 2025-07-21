@@ -1,9 +1,11 @@
 from lox import optimizations, parse
-from configs import pretty_test, load_examples, print_benchmark
+from .configs import pretty_test, load_examples, print_benchmark, BASE_DIR, parse_file_metadata
 from rich import print
 import sys
 import shutil
 import copy
+import argparse
+
 
 """
 
@@ -17,6 +19,58 @@ NOTE: Abrir o arquivo TXT haverá problemas com as cores ANSI, use o less com a 
 
 """
 
+
+def make_argparser():
+  parser = argparse.ArgumentParser(description="Testes de otimização do Lox")
+  parser.add_argument(
+    "file",
+    nargs="?",
+    default="all",
+    help="Arquivo de entrada com os testes de otimização.",
+  )
+
+  parser.add_argument(
+    "-p",
+    "--print",
+    action="store_true",
+    help="Imprime o resultado dos testes no terminal.",
+  )
+  
+  parser.add_argument(
+    "-o",
+    "--output",
+    type=str,
+    default="tests/results.txt",
+    help="Arquivo de saída para os resultados dos testes.",
+  )
+
+  return parser
+
+
+def main():
+  parser = make_argparser()
+  args = parser.parse_args()
+  tests = []
+  
+  if (args.file == "all"):
+    tests = load_examples()
+  else:
+    path = BASE_DIR.joinpath(args.file)
+    try:
+      with open(path, "r") as f:
+        src = f.read()
+        metadata = parse_file_metadata(src, path)
+        tests.append(metadata)        
+    except FileNotFoundError:
+      print(f"Arquivo {args.file} não encontrado.")
+      exit(1)
+
+  if not tests:
+    print(f"Nenhum teste encontrado no arquivo {args.file}.")
+    exit(1)
+   
+  test(tests, print_results=args.print, output_file=args.output)
+  
 
 def test_constant_and_folding_ast(src: str, ast_program=None):
   original_ast = copy.deepcopy(ast_program) if ast_program else parse(src)
@@ -46,26 +100,33 @@ def print_divider(char='-'):
     width = shutil.get_terminal_size().columns
     print(char * width)
 
-def test(tests):
-  with open("tests/results.txt", "w"):
-    pass
+    
+def print_test(test: dict, index: int):
+  print_divider()
+  print(pretty_test(test, index))
+
+  ast, original_ast = [None, None]
+  if "propagation" in test["optimizations"]:
+    ast, original_ast = test_constant_and_folding_ast(test["src"])
+  if "unsed_vars" in test["optimizations"]:
+    ast, original_ast = test_unsed_vars(test["src"], ast)
+
+  print_benchmark(test, original_ast, ast)
+
+def test(tests: list[dict], print_results=False, output_file="tests/results.txt"):
+  if not print_results:
+    with open("tests/results.txt", "w"):
+      pass
   for [index, test] in enumerate(tests, start=1):
       print (f"Testing source: {test['relative_path']}")
-      with open("tests/results.txt", "a") as f:
-          sys.stdout = f
-          print_divider()
-          print(pretty_test(test, index))
-
-          ast, original_ast = [None, None]
-          if "propagation" in test["optimizations"]:
-            ast, original_ast = test_constant_and_folding_ast(test["src"])
-          if "unsed_vars" in test["optimizations"]:
-            ast, original_ast = test_unsed_vars(test["src"], ast)
-
-          print_benchmark(test, original_ast, ast)
-          sys.stdout = sys.__stdout__
+      if print_results:
+          print_test(test, index)
+      if not print_results:
+        with open(output_file, "a") as f:
+            sys.stdout = f
+            print_test(test, index)
+            sys.stdout = sys.__stdout__
   print (f"[bold][green]Tests completed![/green][/bold]")
-  print (f"[bold]Run following command to view results:[/bold]")
-  print (f"[blue]less -R tests/results.txt[/blue]")
-
-test(load_examples())
+  if not print_results:
+    print (f"[bold]Run following command to view results:[/bold]")
+    print (f"[blue]less -R {output_file}[/blue]")

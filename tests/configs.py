@@ -19,6 +19,26 @@ LEX_REGEX = re.compile(
 )
 
 
+def parse_file_metadata(file_content: str, file_path: Path) -> dict[str, any]:
+  optimizations = []
+  description = ""
+  for m in LEX_REGEX.finditer(file_content):
+    if m.lastgroup == "OPTIMIZATIONS":
+      optimizations = m.group("OPTIMIZATIONS").strip().split(",")
+    elif m.lastgroup == "DESCRIPTION":
+      description = m.group("DESCRIPTION").strip()
+    elif m.lastgroup in ("COMMENT", "IGNORE"):
+      continue
+  
+  return {
+    "src": file_content,
+    "file": file_path.name,
+    "path": str(file_path.resolve()),
+    "relative_path": str(file_path.relative_to(BASE_DIR)),
+    "optimizations": optimizations,
+    "description": description,
+  }
+
 def load_examples(
     folder: Path = EXAMPLES,
 ) -> list[dict[str, any]]:
@@ -32,30 +52,18 @@ def load_examples(
         if not file_path.suffix == ".lox":
             continue
 
-        with open(file_path, "r", encoding="utf-8") as file:
-            src = file.read()
-            optimizations = []
-            description = ""
-            for m in LEX_REGEX.finditer(src):
-              if m.lastgroup == "OPTIMIZATIONS":
-                optimizations = m.group("OPTIMIZATIONS").strip().split(",")
-              elif m.lastgroup == "DESCRIPTION":
-                description = m.group("DESCRIPTION").strip()
-              elif m.lastgroup in ("COMMENT", "IGNORE"):
-                continue
+        try:
+          with open(file_path, "r", encoding="utf-8") as file:
+              src = file.read()
+              metadata = parse_file_metadata(src, file_path)
+              examples.append(metadata)
 
-            examples.append({
-                "src": src,
-                "file": file_path.name,
-                "path": str(file_path.resolve()),
-                "relative_path": str(file_path.relative_to(BASE_DIR)),
-                "optimizations": optimizations,
-                "description": description,
-            })
+        except FileNotFoundError:
+          print(f"[red]File not found: {file_path}[/red]")
+          exit(1)
 
     examples.sort(key=lambda x: x["file"])
     return examples
-    
   
   
 def test_benchmark(ast: ast.Program):
