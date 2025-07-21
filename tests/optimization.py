@@ -44,6 +44,15 @@ def make_argparser():
     help="Arquivo de saída para os resultados dos testes.",
   )
 
+  parser.add_argument(
+    '-b',
+    '--benchmark',
+    type=str,
+    choices=["true", "false"],
+    default="true",
+    help="Habilita o benchmark dos testes de otimização.",
+  )
+
   return parser
 
 
@@ -68,8 +77,9 @@ def main():
   if not tests:
     print(f"Nenhum teste encontrado no arquivo {args.file}.")
     exit(1)
+  
    
-  test(tests, print_results=args.print, output_file=args.output)
+  test(tests, print_results=args.print, output_file=args.output, benchmark=args.benchmark == "true")
   
 
 def test_constant_and_folding_ast(src: str, ast_program=None):
@@ -101,7 +111,7 @@ def print_divider(char='-'):
     print(char * width)
 
     
-def print_test(test: dict, index: int):
+def print_test(test: dict, index: int, benchmark: bool = True):
   print_divider()
   print(pretty_test(test, index))
 
@@ -111,20 +121,21 @@ def print_test(test: dict, index: int):
   if "unsed_vars" in test["optimizations"]:
     ast, original_ast = test_unsed_vars(test["src"], ast)
 
-  print_benchmark(test, original_ast, ast)
+  if benchmark:
+    print_benchmark(test, original_ast, ast)
 
-def test(tests: list[dict], print_results=False, output_file="tests/results.txt"):
+def test(tests: list[dict], print_results=False, output_file="tests/results.txt", benchmark=True):
   if not print_results:
     with open("tests/results.txt", "w"):
       pass
   for [index, test] in enumerate(tests, start=1):
       print (f"Testing source: {test['relative_path']}")
       if print_results:
-          print_test(test, index)
+          print_test(test, index, benchmark)
       if not print_results:
         with open(output_file, "a") as f:
             sys.stdout = f
-            print_test(test, index)
+            print_test(test, index, benchmark)
             sys.stdout = sys.__stdout__
   print (f"[bold][green]Tests completed![/green][/bold]")
   if not print_results:

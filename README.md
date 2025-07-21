@@ -72,24 +72,33 @@ uv run
 
 **3. Rodar os testes**
 
-Na pasta `tests` existem alguns arquivos, o principal deles é o `tests/optimization.py`, ele roda o intepretador com os códigos na pasta `exemplos/optimization`, mostrando as otimizações realizadas e um benchmark comparativo. Para executar arquivo siga as instruções abaixo:
+O sistema de otimizações possui uma CLI, agora basta executar:
 
-Execute o arquivo:
-```
-uv run tests/optimization.py
+```bash
+uv run optimization
 ```
 
-O script irá criar um arquivo `tests/results.txt`, que contém o resultado dos testes.
+E ele criará um arquivo `tests/results.txt` com o resultado dos testes, para visualizar execute:
 
-Para visualizar os resultados execute:
-```
+```bash
 less -R tests/results.txt
 # ou
 cat tests/results.txt
 ```
 
+
 > *⚠️ Importante: O arquivo `results.txt` usa caracteres ANSI (cores), recomenda-se a leitura com programas adequados*
-> 
+
+
+Veja mais comandos da CLI com `uv run optimization --help`
+
+---
+
+Também é possível rodar um arquivo lox otimizado com a CLI padrão:
+
+```bash
+uv run lox exemplos/optimization/propagation/3.lox -o
+```
 
 ## 💡 Exemplos
 

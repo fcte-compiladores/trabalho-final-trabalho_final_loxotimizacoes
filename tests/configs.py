@@ -133,6 +133,6 @@ def print_benchmark(test: dict, original_ast: ast.Program, ast: ast.Program):
   print(f"[bold][magenta]Optimized AST Execution Time: {optimized_bench['execution_time']} seconds[/magenta][/bold]")
   print(f"[bold][blue]Variables in original AST: {original_bench['variables']}[/blue][/bold]")
   print(f"[bold][yellow]Variables in optimized AST: {optimized_bench['variables']}[/yellow][/bold]")
-  times_faster = original_bench["execution_time"] // optimized_bench["execution_time"]
+  times_faster = original_bench["execution_time"] // (optimized_bench["execution_time"] if optimized_bench["execution_time"] != 0 else 1)
   print(f"[italic]Optimized it was {times_faster}x faster than original[/italic]")
   print("\n[bold][green]BENCHMARKS completed![/green][/bold]\n")
