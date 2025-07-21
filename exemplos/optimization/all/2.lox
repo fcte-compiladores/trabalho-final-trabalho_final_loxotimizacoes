@@ -1,5 +1,5 @@
 // optimizations: propagation,unsed_vars
-// description: Exemplo de um código simplificado de uma lanchonete, com algumas variáveis não utilizadas e expressões a mais.
+// description: Exemplo de um código simplificado de um mercado, com algumas variáveis não utilizadas e expressões a mais.
 
   //item //valor
 var pao = 2.0;
