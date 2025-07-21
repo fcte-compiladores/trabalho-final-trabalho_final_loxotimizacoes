@@ -30,6 +30,10 @@ class ConstantPropagation:
             # Não é seguro propagar funções por causa de efeitos colaterais...
             return node
 
+        elif isinstance(node, ast.While):
+            # Não é seguro propagar while por causa de efeitos colaterais...
+            return node
+        
         elif isinstance(node, ast.Call):
             node.args = [self.propagate(arg) for arg in node.args]
             return node

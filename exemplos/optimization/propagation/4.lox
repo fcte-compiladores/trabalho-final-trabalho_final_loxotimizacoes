@@ -2,14 +2,8 @@
 // description: Exemplo de propagação de variáveis em operação em loop com contador.
 
 var i = 0;
-while (i < 3) {
-  var x = 2 * 3;
-  print x;
+while (i < 5) {
+  var x = i;
+  print x*x;
   i = i + 1;
 }
-
-
-var i = 0;
-print i;
-i = i + 1;
-print i;
